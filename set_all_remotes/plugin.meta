@@ -1,0 +1,15 @@
+{
+    "id": "set_all_remotes",
+    "name": "Set all remotes",
+    "description": "Sets all the remotes of the current flow to the selected remote in this block.",
+    "author": "Christian Dom\u00ednguez",
+    "version": "0.0.1",
+    "pluginFile": "plugin.py",
+    "minHorusVersion": "0.4.1",
+    "maxHorusVersion": null,
+    "platforms": [
+        "universal"
+    ],
+    "externalURL": null,
+    "dependencies": []
+}
