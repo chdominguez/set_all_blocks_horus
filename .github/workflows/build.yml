@@ -1,0 +1,51 @@
+name: Build and Release Plugin
+
+on:
+  push:
+    tags:
+      - "*"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build the plugin
+        run: bash build_plugin.sh
+
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Set All Remotes ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Upload release asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./set_all_remotes.hp
+          asset_name: set_all_remotes.hp
+          asset_content_type: application/octet-stream
+
+      - name: Upload to Horus plugin repository
+        run: |
+          # Install jq and curl
+          sudo apt install jq curl -y
+
+          echo "Uploading plugin to Horus repository"
+
+          curl -X 'POST' \
+          'https://horus.bsc.es/repo_api/plugins/' \
+          -H 'accept: application/json' \
+          -H 'Content-Type: multipart/form-data' \
+          -F "description=$(jq -Rs . < plugin_description.md)" \
+          -F 'file=@set_all_remotes.hp' \
+          -H "Authorization: Bearer ${{ secrets.REPO_TOKEN }}"
