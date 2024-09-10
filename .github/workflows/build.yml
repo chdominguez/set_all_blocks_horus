@@ -33,6 +33,6 @@ jobs:
           'https://horus.bsc.es/repo_api/plugins/' \
           -H 'accept: application/json' \
           -H 'Content-Type: multipart/form-data' \
-          -F "description=$(jq -Rs . < plugin_description.md)" \
+          -F "description=$(jq -Rs . < README.md)" \
           -F 'file=@set_all_remotes.hp' \
           -H "Authorization: Bearer ${{ secrets.REPO_TOKEN }}"
