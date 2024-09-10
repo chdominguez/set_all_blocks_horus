@@ -16,24 +16,11 @@ jobs:
       - name: Build the plugin
         run: bash build_plugin.sh
 
-      - name: Create release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Release
+        uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Set All Remotes ${{ github.ref }}
-          draft: false
-          prerelease: false
-
-      - name: Upload release asset
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./set_all_remotes.hp
-          asset_name: set_all_remotes.hp
-          asset_content_type: application/octet-stream
+          files: |
+            set_all_remotes.hp
 
       - name: Upload to Horus plugin repository
         run: |
